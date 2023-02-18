@@ -7,12 +7,23 @@
 LiquidCrystal_I2C lcd(0x3F,16,2);  // set the LCD address to 0x27 for a 16 chars and 2 line display
 TM1640 module(9, 10, 16);    // data, clock, 4 digits
 
+
+uint8_t bell[8]  = {0x4,0xe,0xe,0xe,0x1f,0x0,0x4};
+uint8_t note[8]  = {0x2,0x3,0x2,0xe,0x1e,0xc,0x0};
+uint8_t smiley[8] = {B00000,B10001,B00000,B00000,B10001,B01110,B00000,};
+uint8_t heart[8] = {0x0,0xa,0x1f,0x1f,0xe,0x4,0x0};
+uint8_t duck[8]  = {0x0,0xc,0x1d,0xf,0xf,0x6,0x0};
+uint8_t check[8] = {0x0,0x1,0x3,0x16,0x1c,0x8,0x0};
+uint8_t cross[8] = {0x0,0x1b,0xe,0x4,0xe,0x1b,0x0};
+uint8_t retarrow[8] = {  0x1,0x1,0x5,0x9,0x1f,0x8,0x4};
+
+
 void scani2c() {
   
   int nDevices = 0;
 
   Serial.println("Scanning...");
-  int lol = 3;
+  int lol = 5;
   lcd.setCursor(lol,1);
   for (byte address = 1; address < 127; ++address) {
     // The i2c_scanner uses the return value of
@@ -58,7 +69,17 @@ void setup() {
   //module.clearDisplay();
 
   lcd.init();                      // initialize the lcd 
-  lcd.init();
+  
+  
+  lcd.createChar(0, bell);
+  lcd.createChar(1, note);
+  lcd.createChar(2, smiley);
+  lcd.createChar(3, heart);
+  lcd.createChar(4, duck);
+  lcd.createChar(5, check);
+  lcd.createChar(6, cross);
+  lcd.createChar(7, retarrow);
+  
   // Print a message to the LCD.
   lcd.backlight();
   lcd.setCursor(0,0);
@@ -80,5 +101,15 @@ void loop() {
   digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
   module.setDisplayToDecNumber(nTime, _BV(3)); // display colon on digit 3
   delay(500);                        // wait
+  
+  lcd.setCursor(8,1);
+  lcd.write(byte(0));
+  lcd.write(byte(1));
+  lcd.write(byte(2));
+  lcd.write(byte(3));
+  lcd.write(byte(4));
+  lcd.write(byte(5));
+  lcd.write(byte(6));
+  lcd.write(byte(7));
 
 }
